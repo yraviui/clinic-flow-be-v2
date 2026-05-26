@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      // "https://patient-info.yraviprakash.com",
+      "https://clinic-flow.yraviprakash.com",
     ],
     credentials: true,
   })
