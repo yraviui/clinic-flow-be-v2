@@ -14,9 +14,21 @@ export const contactController = async (req, res) => {
       },
     });
 
-    await transporter.sendMail({
+    /* await transporter.sendMail({
       from: `"Contact Form" <${email}>`,
       to: `<${process.env.EMAIL_USER}>`,
+      subject: subject || "New Contact Message from Auth System",
+      html: `
+        <h3>New Message Received</h3>
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Message:</b> ${message}</p>
+      `,
+    }); */
+    await transporter.sendMail({
+      from: `"Contact Form" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      replyTo: email,
       subject: subject || "New Contact Message from Auth System",
       html: `
         <h3>New Message Received</h3>
