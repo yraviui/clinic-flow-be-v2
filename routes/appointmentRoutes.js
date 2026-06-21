@@ -12,9 +12,9 @@ router.post("/create", createAppointmentController);
 
 router.get( "/doctor/:doctorId", isRequiredAuth, isDoctor, getAllAppointmentsController );
 
-router.get( "/doctor/:doctorId/:appointmentDate", getAppointmentsController );
+router.get( "/doctor/:doctorId/:appointmentDate",isRequiredAuth, isDoctor, getAppointmentsController );
 
-router.put("/status/:id", isRequiredAuth, isDoctor, updateAppointmentStatusController);
+router.put("/status/:doctorId", isRequiredAuth, isDoctor, updateAppointmentStatusController);
 
 router.post("/check-slot", checkSlotAvailabilityController);
 
