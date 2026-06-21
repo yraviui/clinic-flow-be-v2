@@ -70,7 +70,7 @@ export const getAppointmentsController = async (req, res) => {
 
     return res.status(500).send({
       success: false,
-      message: "Error fetching appointments",
+      message: "Error fetching appointments A",
       error,
     });
   }
