@@ -22,6 +22,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://clinic-flow.yraviprakash.com",
+      "https://www.yraviprakash.com",
+      "https://yraviprakash.com",
     ],
     credentials: true,
   })
