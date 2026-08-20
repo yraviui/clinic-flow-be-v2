@@ -10,9 +10,9 @@ const router = express.Router();
 
 router.post("/create", createAppointmentController);
 
-router.get( "/doctor/:doctorId", isRequiredAuth, isDoctor, getAllAppointmentsController );
+router.get( "/doctor/:doctorId", getAllAppointmentsController );
 
-router.get( "/doctor/:doctorId/:appointmentDate",isRequiredAuth, isDoctor, getAppointmentsController );
+router.get( "/doctor/:doctorId/:appointmentDate", getAppointmentsController );
 
 router.put("/status/:doctorId", isRequiredAuth, isDoctor, updateAppointmentStatusController);
 

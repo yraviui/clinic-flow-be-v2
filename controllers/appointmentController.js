@@ -1,28 +1,52 @@
 import AppointmentModel from "../models/appointments.js";
 import transporter from "../utils/mailer.js";
 
-
-// CREATE APPOINTMENT
 export const createAppointmentController = async (req, res) => {
-
   try {
+    const { patientName, patientEmail, doctorId, appointmentDate, slot } = req.body;
 
-    const appointment = await AppointmentModel.create(req.body);
+    // 1. Validate required fields
+    if ( !patientName || !patientEmail || !doctorId || !appointmentDate || !slot ) {
+      return res.status(400).send({
+        success: false,
+        message:
+          "patientName, patientEmail, doctorId, appointmentDate and slot are required",
+      });
+    }
 
-    res.status(201).send({
+    // 2. Check if slot is already booked
+    const existingAppointment = await AppointmentModel.findOne({
+      doctorId,
+      appointmentDate,
+      slot,
+      status: { $in: ["pending", "confirmed"] },
+    });
+
+    if (existingAppointment) {
+      return res.status(409).send({
+        success: false,
+        message: "This appointment slot is already booked",
+      });
+    }
+
+    // 3. Create appointment
+    const appointment = await AppointmentModel.create({
+      patientName, patientEmail, doctorId, appointmentDate, slot, status: "pending",
+    });
+
+    // 4. Response
+    return res.status(201).send({
       success: true,
       message: "Appointment created successfully",
       appointment,
     });
-
   } catch (error) {
+    console.error("Create appointment error:", error);
 
-    console.log(error);
-
-    res.status(500).send({
+    return res.status(500).send({
       success: false,
       message: "Error in create appointment",
-      error,
+      error: error.message,
     });
   }
 };
@@ -158,7 +182,7 @@ export const getAllAppointmentsController =
 export const updateAppointmentStatusController =
   async (req, res) => {
     try {
-      const { id } = req.params;
+      const { doctorId } = req.params;
 
       const { status } = req.body;
 
@@ -179,9 +203,7 @@ export const updateAppointmentStatusController =
 
       // FIND APPOINTMENT
       const appointment =
-        await AppointmentModel.findById(
-          id
-        );
+        await AppointmentModel.findById( doctorId );
 
       if (!appointment) {
         return res.status(404).send({
